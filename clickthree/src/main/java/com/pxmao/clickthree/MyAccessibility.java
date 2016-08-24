@@ -68,12 +68,18 @@ public class MyAccessibility extends AccessibilityService {
                     Log.i(TAG, "noteInfo is　null");
                     return;
                 } else {
+
                     recycle(rowNode);
                 }
-
                 getName();
-
                 break;
+        }
+    }
+
+
+
+
+
 
            /* case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
                 eventText = "TYPE_WINDOW_CONTENT_CHANGED";*/
@@ -102,21 +108,17 @@ public class MyAccessibility extends AccessibilityService {
             //List<AccessibilityNodeInfo> list = rootInActiveWindow.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/ey");
 
 
-
-
-
             // Log.i("MyAccessibility",.toString());
 
             //  AccessibilityNodeInfo info = findNodeInfosById(this.getRootInActiveWindow(), "com.tencent.mm:id/ey");
             //  break;
-        }
 
 
-//        Log.i(TAG, eventText);
-//        Log.i(TAG, "=============END=====================");
+            // Log.i(TAG, eventText);
+            // Log.i(TAG, "=============END=====================");
 
 
-    }
+
 
 
     /**
@@ -153,19 +155,19 @@ public class MyAccessibility extends AccessibilityService {
      * @param info
      */
     public void recycle(AccessibilityNodeInfo info) {
+
         if (info.getChildCount() == 0) {
-            //  Log.i(TAG, "child widget----------------------------" + info.getClassName());
-            // Log.i(TAG, "showDialog:" + info.canOpenPopup());
+            // Log.i(TAG, "child widget----------------------------" + info.getClassName());
+
             if (info.getText() != null) {
                 Log.i(TAG, "Text：" + info.getText());//获取控件节点文本
+               // Log.i(TAG, "windowId:" + info.getWindowId());
+            }
+        }else {
+            for (int i = 0; i < info.getChildCount(); i++) {
+                if (info.getChild(i) != null) {
+                    recycle(info.getChild(i));
 
-
-                //  Log.i(TAG, "windowId:" + info.getWindowId());
-            } else {
-                for (int i = 0; i < info.getChildCount(); i++) {
-                    if (info.getChild(i) != null) {
-                        recycle(info.getChild(i));
-                    }
                 }
             }
         }
