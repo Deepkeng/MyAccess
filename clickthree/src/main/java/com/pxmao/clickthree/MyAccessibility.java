@@ -7,17 +7,16 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-
 import com.pxmao.clickthree.Utils.FindNodeUtils;
 
 import java.util.List;
 
 /**
- * Created by C on 2016/8/11.
+ * Created by psq on 2016/8/11.
  */
 public class MyAccessibility extends AccessibilityService {
     private static final String TAG = "MyAccessibility";
-    private String msg;
+
     private String className;
 
     @SuppressLint("NewApi")
@@ -62,8 +61,8 @@ public class MyAccessibility extends AccessibilityService {
             case AccessibilityEvent.TYPE_VIEW_CLICKED:
                 eventText = "TYPE_VIEW_CLICKED";
 
-                AccessibilityNodeInfo rowNode = getRootInActiveWindow();
-
+                AccessibilityNodeInfo rowNode;
+                rowNode = this.getRootInActiveWindow();
 
                 if (rowNode == null) {
                     Log.i(TAG, "noteInfo is　null");
@@ -268,7 +267,7 @@ public class MyAccessibility extends AccessibilityService {
         if (className.equals("com.tencent.mm.plugin.search.ui.FTSMainUI")) {
             Log.i("语音输入", "1111111");
             SystemClock.sleep(2000);
-            performClickByText("语音输入");
+            performClickByText(this.getRootInActiveWindow(),"语音输入");
         }
     }
 
@@ -302,14 +301,10 @@ public class MyAccessibility extends AccessibilityService {
     }
 
     //通过文字执行点击
-    private void performClickByText(String text) {
-
+    private void performClickByText(AccessibilityNodeInfo nodeInfo,String text) {
         Log.i("MyService", "通过文字执行点击");
-
-        AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过名字获取
-        //targetNode = findNodeInfosByText(nodeInfo,"广告");
         targetNode = FindNodeUtils.findNodeInfosByText(nodeInfo, text);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);

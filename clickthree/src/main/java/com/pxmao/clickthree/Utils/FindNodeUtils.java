@@ -11,7 +11,7 @@ import java.util.List;
 public class FindNodeUtils {
 
 
-    //通过文本查找
+    //通过文本查找目标节点
     public static AccessibilityNodeInfo findNodeInfosByText(AccessibilityNodeInfo nodeInfo, String text) {
         List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(text);
         if (list == null || list.isEmpty()) {
@@ -21,7 +21,7 @@ public class FindNodeUtils {
     }
 
 
-    //通过id查找
+    //通过id查找目标节点
     public static AccessibilityNodeInfo findNodeInfosById(AccessibilityNodeInfo nodeInfo, String resId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId(resId);
