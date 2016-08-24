@@ -2,16 +2,13 @@ package com.pxmao.clickthree;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.nfc.Tag;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+
+import com.pxmao.clickthree.Utils.FindNodeUtils;
 
 import java.util.List;
 
@@ -66,6 +63,8 @@ public class MyAccessibility extends AccessibilityService {
                 eventText = "TYPE_VIEW_CLICKED";
 
                 AccessibilityNodeInfo rowNode = getRootInActiveWindow();
+
+
                 if (rowNode == null) {
                     Log.i(TAG, "noteInfo is　null");
                     return;
@@ -73,21 +72,8 @@ public class MyAccessibility extends AccessibilityService {
                     recycle(rowNode);
                 }
 
-                List<AccessibilityNodeInfo> list = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.tencent.mm:id/ey");
-                if (list != null && !list.isEmpty()) {
-                    CharSequence text = list.get(0).getText();
-                    Log.i(TAG,"list"+text.toString());
-                }
+                getName();
 
-
-
-                /*AccessibilityNodeInfo info = getRootInActiveWindow();
-
-                for (int i = 0; i < info.getChildCount(); i++) {
-                    // info.getChild(i);
-                    Log.i("MyAccessibility", info.getChild(i).toString());
-
-                }*/
                 break;
 
            /* case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
@@ -106,21 +92,24 @@ public class MyAccessibility extends AccessibilityService {
 
 
 
+                 /*AccessibilityNodeInfo info = getRootInActiveWindow();
+
+                for (int i = 0; i < info.getChildCount(); i++) {
+                    // info.getChild(i);
+                    Log.i("MyAccessibility", info.getChild(i).toString());
+
+                }*/
+
+            //List<AccessibilityNodeInfo> list = rootInActiveWindow.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/ey");
 
 
-                //List<AccessibilityNodeInfo> list = rootInActiveWindow.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/ey");
 
 
 
+            // Log.i("MyAccessibility",.toString());
 
-
-               // Log.i("MyAccessibility",.toString());
-
-                //  AccessibilityNodeInfo info = findNodeInfosById(this.getRootInActiveWindow(), "com.tencent.mm:id/ey");
-
-
-
-              //  break;
+            //  AccessibilityNodeInfo info = findNodeInfosById(this.getRootInActiveWindow(), "com.tencent.mm:id/ey");
+            //  break;
         }
 
 
@@ -131,19 +120,53 @@ public class MyAccessibility extends AccessibilityService {
     }
 
 
+    /**
+     * 获取当前和谁在聊天
+     */
+    private String getName() {
+        CharSequence text = null;
+        List<AccessibilityNodeInfo> list = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.tencent.mm:id/ey");
+        if (list != null && !list.isEmpty()) {
+             text = list.get(0).getText();
+            Log.i(TAG," 当前在跟"+text+"聊天");
+            return text.toString();
+        }
+        return null;
+    }
+
+   /* private String getWeixinNumb(){
+        CharSequence text = null;
+        List<AccessibilityNodeInfo> list = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.tencent.mm:id/a94");
+        if (list != null && !list.isEmpty()) {
+            text = list.get(0).getText();
+            Log.i(TAG," 微信號碼為"+text);
+            return text.toString();
+        }
+        return null;
+
+    }
+*/
+
+
+
+    /**
+     * 循环打印节点的文本信息
+     * @param info
+     */
     public void recycle(AccessibilityNodeInfo info) {
         if (info.getChildCount() == 0) {
             //  Log.i(TAG, "child widget----------------------------" + info.getClassName());
             // Log.i(TAG, "showDialog:" + info.canOpenPopup());
-            if(info.getText()!= null){
+            if (info.getText() != null) {
                 Log.i(TAG, "Text：" + info.getText());//获取控件节点文本
 
-            }
-            //  Log.i(TAG, "windowId:" + info.getWindowId());
-        } else {
-            for (int i = 0; i < info.getChildCount(); i++) {
-                if(info.getChild(i)!=null){
-                    recycle(info.getChild(i));
+
+                //  Log.i(TAG, "windowId:" + info.getWindowId());
+            } else {
+                for (int i = 0; i < info.getChildCount(); i++) {
+                    if (info.getChild(i) != null) {
+                        recycle(info.getChild(i));
+                    }
                 }
             }
         }
@@ -196,6 +219,9 @@ public class MyAccessibility extends AccessibilityService {
         String content = "";
         String liaotian = "";
         List<CharSequence> texts = event.getText();
+        //AccessibilityNodeInfo source = event.getSource();
+
+
         if (!texts.isEmpty()) {
             for (CharSequence text : texts) {
                 content = text.toString();//拿到通知栏的消息
@@ -284,7 +310,7 @@ public class MyAccessibility extends AccessibilityService {
         AccessibilityNodeInfo targetNode = null;
         //通过名字获取
         //targetNode = findNodeInfosByText(nodeInfo,"广告");
-        targetNode = findNodeInfosByText(nodeInfo, text);
+        targetNode = FindNodeUtils.findNodeInfosByText(nodeInfo, text);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
 
@@ -298,7 +324,7 @@ public class MyAccessibility extends AccessibilityService {
         AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过资源ID点击
-        targetNode = findNodeInfosById(nodeInfo, resId);
+        targetNode = FindNodeUtils.findNodeInfosById(nodeInfo, resId);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
@@ -310,7 +336,7 @@ public class MyAccessibility extends AccessibilityService {
         AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过资源ID点击
-        targetNode = findNodeInfosById(nodeInfo, resId, index);
+        targetNode = FindNodeUtils.findNodeInfosById(nodeInfo, resId, index);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
@@ -323,7 +349,7 @@ public class MyAccessibility extends AccessibilityService {
         AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过资源ID点击
-        targetNode = findNodeInfosByIdByFather(nodeInfo, resId, index);
+        targetNode = FindNodeUtils.findNodeInfosByIdByFather(nodeInfo, resId, index);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
@@ -336,7 +362,7 @@ public class MyAccessibility extends AccessibilityService {
         AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过资源ID点击
-        targetNode = findNodeInfosByIdByFather1(nodeInfo, resId, index);
+        targetNode = FindNodeUtils.findNodeInfosByIdByFather1(nodeInfo, resId, index);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
@@ -349,7 +375,7 @@ public class MyAccessibility extends AccessibilityService {
         AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过资源ID点击
-        targetNode = findNodeInfosById(nodeInfo, resId);
+        targetNode = FindNodeUtils.findNodeInfosById(nodeInfo, resId);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
         }
@@ -379,7 +405,7 @@ public class MyAccessibility extends AccessibilityService {
         AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过资源ID点击
-        targetNode = findNodeInfosById(nodeInfo, resId);
+        targetNode = FindNodeUtils.findNodeInfosById(nodeInfo, resId);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK);
         }
@@ -394,7 +420,7 @@ public class MyAccessibility extends AccessibilityService {
         AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过名字获取
-        targetNode = findNodeInfosByText(nodeInfo, text);
+        targetNode = FindNodeUtils.findNodeInfosByText(nodeInfo, text);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK);
 
@@ -403,7 +429,7 @@ public class MyAccessibility extends AccessibilityService {
     }
 
 
-    //通过文本查找
+    /*//通过文本查找
     public static AccessibilityNodeInfo findNodeInfosByText(AccessibilityNodeInfo nodeInfo, String text) {
         List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(text);
         if (list == null || list.isEmpty()) {
@@ -457,7 +483,7 @@ public class MyAccessibility extends AccessibilityService {
             }
         }
         return null;
-    }
+    }*/
 
 
 }
