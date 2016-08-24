@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ClickThree</string>
+    <string name="click_auto">模拟点击</string>
+</resources>
