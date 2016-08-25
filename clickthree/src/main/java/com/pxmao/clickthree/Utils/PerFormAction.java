@@ -9,8 +9,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 public class PerFormAction {
 
     //执行点击
-   public static void performClickById(AccessibilityNodeInfo targetNode) {
-        Log.i("MyService", "通过ID执行点击");
+   public static void performClick(AccessibilityNodeInfo targetNode) {
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
