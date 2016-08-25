@@ -11,11 +11,11 @@ public class PerFormAction {
     public PerFormAction(){}
 
     /**
-     * 通过索引执行首页底部点击（微信，通讯录，发现，我）
+     * 通过索引执行首页底部点击
      * @param rowNode 当前窗口节点
      * @param index   1微信  2通讯录  3发现  4我
      */
-    public void performClickByIdByFather(AccessibilityNodeInfo rowNode, int index){
+    public void performClickByIndexToBottom(AccessibilityNodeInfo rowNode, int index){
         Log.i("MyService","通过父ID执行点击");
         AccessibilityNodeInfo targetNode = null;
         targetNode = FindNodeUtils.findBottomNodeByIndex(rowNode,index);

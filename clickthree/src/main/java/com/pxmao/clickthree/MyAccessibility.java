@@ -81,7 +81,7 @@ public class MyAccessibility extends AccessibilityService {
                 Log.i(TAG,"当前在和"+name+"聊天");
 
                 PerFormAction perFormAction = new PerFormAction();
-                perFormAction.performClickByIdByFather(rootInActiveWindow,3);
+                perFormAction.performClickByIndexToBottom(rootInActiveWindow,4);
 
                 break;
         }
