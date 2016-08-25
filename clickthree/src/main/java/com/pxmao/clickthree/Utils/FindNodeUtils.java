@@ -4,7 +4,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import java.util.List;
 
 /**
- * Created by psq on 2016/8/24.
+ * Created by psq on 2016/8/24
  */
 public class FindNodeUtils {
 
@@ -54,14 +54,23 @@ public class FindNodeUtils {
         return null;
     }
 
-    //通过父id查找首页底部（微信，通讯录，发现，我）
-    public static AccessibilityNodeInfo findNodeInfosByIdByFather(AccessibilityNodeInfo nodeInfo, String resId, int index) {
+    /**
+     *通过父id查找首页底部（微信，通讯录，发现，我）
+     * @param nodeInfo
+     * @param index 1微信  2通讯录  3发现  4我
+     * @return
+     */
+    public static AccessibilityNodeInfo findNodeInfosByIdByFather(AccessibilityNodeInfo nodeInfo, int index) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId(resId);
+            List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId("android:id/content");
             if (list != null && !list.isEmpty()) {
                 return list.get(0).getChild(0).getChild(0).getChild(1).getChild(0).getChild(index);
             }
         }
         return null;
     }
+
+
+
+
 }

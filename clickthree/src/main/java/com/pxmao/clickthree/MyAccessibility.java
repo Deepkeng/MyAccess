@@ -2,12 +2,14 @@ package com.pxmao.clickthree;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import com.pxmao.clickthree.Utils.FindNodeUtils;
+import com.pxmao.clickthree.Utils.WeiXinUtils;
 
 import java.util.List;
 
@@ -54,7 +56,6 @@ public class MyAccessibility extends AccessibilityService {
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
                 eventText = "TYPE_NOTIFICATION_STATE_CHANGED";
                 filtMsg(event);
-
                 break;
 
 
@@ -71,7 +72,9 @@ public class MyAccessibility extends AccessibilityService {
 
                     recycle(rowNode);
                 }
-                getName();
+                String name = WeiXinUtils.getCurrentCommunicateName(getRootInActiveWindow());
+                Log.i(TAG,"当前在和"+name+"聊天");
+
                 break;
         }
     }
@@ -131,9 +134,11 @@ public class MyAccessibility extends AccessibilityService {
              text = list.get(0).getText();
             Log.i(TAG," 当前在跟"+text+"聊天");
             return text.toString();
+      }
+return null;
         }
-        return null;
-    }
+
+
 
    /* private String getWeixinNumb(){
         CharSequence text = null;
@@ -228,11 +233,10 @@ public class MyAccessibility extends AccessibilityService {
                 content = text.toString();//拿到通知栏的消息
                 Log.i("MyAccessibility", "text:" + content);
 
-              /*  //分割内容
+                //分割内容
                 String s = new String(content);
-                String a[] = s.split(":");
+                String a[] = s.split(": ");
                 liaotian = a[1];
-              */
             }
 
 
@@ -258,26 +262,13 @@ public class MyAccessibility extends AccessibilityService {
         return liaotian;
     }
 
-    /**
-     * 点击语音按钮
-     *
-     * @param event
-     */
-    private void sousuo(AccessibilityEvent event) {
-        String className = event.getClassName().toString();
-        Log.i("className", className);
-        if (className.equals("com.tencent.mm.plugin.search.ui.FTSMainUI")) {
-            Log.i("语音输入", "1111111");
-            SystemClock.sleep(2000);
-            performClickByText(this.getRootInActiveWindow(),"语音输入");
-        }
-    }
+
 
 
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
 
-        Log.i("MyService", "按钮点击变化");
+        Log.i(TAG, "按钮点击变化");
 
         //接收按键事件
         return super.onKeyEvent(event);
@@ -288,6 +279,8 @@ public class MyAccessibility extends AccessibilityService {
     public void onInterrupt() {
 
     }
+
+
 
     @Override
     protected void onServiceConnected() {
@@ -303,8 +296,9 @@ public class MyAccessibility extends AccessibilityService {
     }
 
     //通过文字执行点击
-    private void performClickByText(AccessibilityNodeInfo nodeInfo,String text) {
+    private void performClickByText(String text) {
         Log.i("MyService", "通过文字执行点击");
+        AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过名字获取
         targetNode = FindNodeUtils.findNodeInfosByText(nodeInfo, text);
@@ -341,12 +335,12 @@ public class MyAccessibility extends AccessibilityService {
 
 
     //通过父ID和index执行点击
-    private void performClickByIdByFather(String resId, int index) {
+    private void performClickByIdByFather(int index) {
         Log.i("MyService", "通过父ID执行点击");
         AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过资源ID点击
-        targetNode = FindNodeUtils.findNodeInfosByIdByFather(nodeInfo, resId, index);
+        targetNode = FindNodeUtils.findNodeInfosByIdByFather(nodeInfo, index);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
