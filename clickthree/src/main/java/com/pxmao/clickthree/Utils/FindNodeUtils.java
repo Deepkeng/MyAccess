@@ -55,8 +55,8 @@ public class FindNodeUtils {
     }
 
     /**
-     *通过父id查找首页底部（微信，通讯录，发现，我）
-     * @param rowNode 当前窗口跟节点
+     * 通过父id查找首页底部节点
+     * @param rowNode 当前窗口根节点
      * @param index 1微信  2通讯录  3发现  4我
      * @return 目标节点
      */
