@@ -1,7 +1,6 @@
 package com.pxmao.clickthree.Utils;
 
-import android.os.Build;
-import android.util.Log;
+
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.List;

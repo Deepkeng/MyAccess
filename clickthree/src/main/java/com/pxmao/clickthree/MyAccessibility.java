@@ -3,10 +3,12 @@ package com.pxmao.clickthree;
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 
+import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+
 import com.pxmao.clickthree.Utils.FindNodeUtils;
 import com.pxmao.clickthree.Utils.WeiXinUtils;
 
@@ -23,7 +25,7 @@ public class MyAccessibility extends AccessibilityService {
     @SuppressLint("NewApi")
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        // TODO Auto-generated method stub
+
 
         int eventType = event.getEventType();
 
@@ -76,17 +78,35 @@ public class MyAccessibility extends AccessibilityService {
                 AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
                 String name = WeiXinUtils.getCurrentCommunicateName(rootInActiveWindow);
                 Log.i(TAG,"当前在和"+name+"聊天");
-
-
-
-
-
+                performClickByIdByFather(rootInActiveWindow,3);
                 break;
         }
     }
 
 
+    //通过父ID和index执行点击
+    private void performClickByIdByFather(AccessibilityNodeInfo rowNode,int index){
+        Log.i("MyService","通过父ID执行点击");
 
+        AccessibilityNodeInfo targetNode = null;
+        //通过资源ID点击
+        targetNode = FindNodeUtils.findBottomNodeByIndex(rowNode,index);
+        if (targetNode.isClickable()) {
+            targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        }
+    }
+
+
+    //通过父id查找首页底部（微信，通讯录，发现，我）
+    public static AccessibilityNodeInfo findBottomNodeByIndex(AccessibilityNodeInfo nodeInfo,int index) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId("android:id/content");
+            if(list != null && !list.isEmpty()) {
+                return list.get(0).getChild(0).getChild(0).getChild(1).getChild(0).getChild(index);
+            }
+        }
+        return null;
+    }
 
 
 
@@ -299,7 +319,7 @@ return null;
         info.packageNames = new String[]{"com.tencent.mm"};
         setServiceInfo(info);*/
     }
-
+/*
     //通过文字执行点击
     private void performClickByText(String text) {
         Log.i("MyService", "通过文字执行点击");
@@ -378,7 +398,7 @@ return null;
     }
 
 
-    /*//通过资源ID给EditText输入文字  只支持API21以上
+    通过资源ID给EditText输入文字  只支持API21以上
         private void performSetTextById(String resId){
             Log.i("MyService","通过ID给EditText输入文字");
             AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
@@ -392,7 +412,7 @@ return null;
 
                 targetNode.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT,args);
             }
-        }*/
+        }
 
 
     //通过资源ID执行长按
@@ -425,7 +445,7 @@ return null;
     }
 
 
-    /*//通过文本查找
+    //通过文本查找
     public static AccessibilityNodeInfo findNodeInfosByText(AccessibilityNodeInfo nodeInfo, String text) {
         List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(text);
         if (list == null || list.isEmpty()) {
