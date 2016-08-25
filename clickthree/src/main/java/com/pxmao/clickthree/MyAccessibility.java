@@ -340,7 +340,7 @@ return null;
         AccessibilityNodeInfo nodeInfo = this.getRootInActiveWindow();
         AccessibilityNodeInfo targetNode = null;
         //通过资源ID点击
-        targetNode = FindNodeUtils.findNodeInfosByIdByFather(nodeInfo, index);
+        targetNode = FindNodeUtils.findBottomNodeByIndex(nodeInfo, index);
         if (targetNode.isClickable()) {
             targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
