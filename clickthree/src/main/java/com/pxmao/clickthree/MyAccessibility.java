@@ -2,17 +2,11 @@ package com.pxmao.clickthree;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
-
-import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-
-import com.pxmao.clickthree.Utils.FindNodeUtils;
-import com.pxmao.clickthree.Utils.PerFormAction;
 import com.pxmao.clickthree.Utils.WeiXinUtils;
-
 import java.util.List;
 
 /**
@@ -59,29 +53,19 @@ public class MyAccessibility extends AccessibilityService {
                 eventText = "TYPE_NOTIFICATION_STATE_CHANGED";
                 //filtMsg(event);
 
+
                 break;
 
 
             case AccessibilityEvent.TYPE_VIEW_CLICKED:
                 eventText = "TYPE_VIEW_CLICKED";
 
-               /* AccessibilityNodeInfo rowNode;
-                rowNode = this.getRootInActiveWindow();
-
-                if (rowNode == null) {
-                    Log.i(TAG, "noteInfo is　null");
-                    return;
-                } else {
-
-                    recycle(rowNode);
-                }*/
-
-                AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
-                String name = WeiXinUtils.getCurrentCommunicateName(rootInActiveWindow);
+                AccessibilityNodeInfo rootInActiveWindow1 = getRootInActiveWindow();
+                String name = WeiXinUtils.getCurrentCommunicateName(rootInActiveWindow1);
                 Log.i(TAG,"当前在和"+name+"聊天");
 
-                PerFormAction perFormAction = new PerFormAction();
-                perFormAction.performClickByIndexToBottom(rootInActiveWindow,4);
+               // PerFormAction perFormAction = new PerFormAction();
+               // perFormAction.performClickByIndexToBottom(rootInActiveWindow1,4);
 
                 break;
         }
@@ -89,76 +73,10 @@ public class MyAccessibility extends AccessibilityService {
 
 
 
-
-
-           /* case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
-                eventText = "TYPE_WINDOW_CONTENT_CHANGED";*/
-
-            /*    //通过id查找
-                public static AccessibilityNodeInfo findNodeInfosById(AccessibilityNodeInfo nodeInfo, String resId) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId(resId);
-                    if (list != null && !list.isEmpty()) {
-                        return list.get(0);
-                    }
-                }
-                return null;
-            }*/
-
-
-
-                 /*AccessibilityNodeInfo info = getRootInActiveWindow();
-
-                for (int i = 0; i < info.getChildCount(); i++) {
-                    // info.getChild(i);
-                    Log.i("MyAccessibility", info.getChild(i).toString());
-
-                }*/
-
-            //List<AccessibilityNodeInfo> list = rootInActiveWindow.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/ey");
-
-
-            // Log.i("MyAccessibility",.toString());
-
-            //  AccessibilityNodeInfo info = findNodeInfosById(this.getRootInActiveWindow(), "com.tencent.mm:id/ey");
-            //  break;
-
-
             // Log.i(TAG, eventText);
             // Log.i(TAG, "=============END=====================");
 
 
-
-
-
-    /**
-     * 获取当前和谁在聊天
-     */
-    private String getName() {
-        CharSequence text = null;
-        List<AccessibilityNodeInfo> list = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.tencent.mm:id/ey");
-        if (list != null && !list.isEmpty()) {
-             text = list.get(0).getText();
-            Log.i(TAG," 当前在跟"+text+"聊天");
-            return text.toString();
-      }
-return null;
-        }
-
-
-
-   /* private String getWeixinNumb(){
-        CharSequence text = null;
-        List<AccessibilityNodeInfo> list = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.tencent.mm:id/a94");
-        if (list != null && !list.isEmpty()) {
-            text = list.get(0).getText();
-            Log.i(TAG," 微信號碼為"+text);
-            return text.toString();
-        }
-        return null;
-
-    }
-*/
 
 
 
