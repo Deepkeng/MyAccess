@@ -2,8 +2,7 @@ package com.pxmao.clickthree;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.SystemClock;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
@@ -14,7 +13,7 @@ import com.pxmao.clickthree.Utils.WeiXinUtils;
 import java.util.List;
 
 /**
- * Created by psq on 2016/8/11.
+ * Created by psq on 2016/8/11
  */
 public class MyAccessibility extends AccessibilityService {
     private static final String TAG = "MyAccessibility";
@@ -38,7 +37,7 @@ public class MyAccessibility extends AccessibilityService {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                 eventText = "TYPE_WINDOW_STATE_CHANGED";
                 className = event.getClassName().toString();
-                Log.i("MyAccessibility", className);
+             //   Log.i("MyAccessibility", className);
 
             /*    if (className.equals("android.widget.FrameLayout")) {
                     performClickById("com.tencent.mm:id/aes", 1);
@@ -55,14 +54,15 @@ public class MyAccessibility extends AccessibilityService {
 
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
                 eventText = "TYPE_NOTIFICATION_STATE_CHANGED";
-                filtMsg(event);
+                //filtMsg(event);
+
                 break;
 
 
             case AccessibilityEvent.TYPE_VIEW_CLICKED:
                 eventText = "TYPE_VIEW_CLICKED";
 
-                AccessibilityNodeInfo rowNode;
+               /* AccessibilityNodeInfo rowNode;
                 rowNode = this.getRootInActiveWindow();
 
                 if (rowNode == null) {
@@ -71,9 +71,15 @@ public class MyAccessibility extends AccessibilityService {
                 } else {
 
                     recycle(rowNode);
-                }
-                String name = WeiXinUtils.getCurrentCommunicateName(getRootInActiveWindow());
+                }*/
+
+                AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
+                String name = WeiXinUtils.getCurrentCommunicateName(rootInActiveWindow);
                 Log.i(TAG,"当前在和"+name+"聊天");
+
+
+
+
 
                 break;
         }
@@ -166,7 +172,7 @@ return null;
 
             if (info.getText() != null) {
                 Log.i(TAG, "Text：" + info.getText());//获取控件节点文本
-               // Log.i(TAG, "windowId:" + info.getWindowId());
+                // Log.i(TAG, "windowId:" + info.getWindowId());
             }
         }else {
             for (int i = 0; i < info.getChildCount(); i++) {
@@ -226,7 +232,6 @@ return null;
         String liaotian = "";
         List<CharSequence> texts = event.getText();
         //AccessibilityNodeInfo source = event.getSource();
-
 
         if (!texts.isEmpty()) {
             for (CharSequence text : texts) {
