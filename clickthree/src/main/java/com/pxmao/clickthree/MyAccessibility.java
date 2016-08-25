@@ -10,6 +10,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.pxmao.clickthree.Utils.FindNodeUtils;
+import com.pxmao.clickthree.Utils.PerFormAction;
 import com.pxmao.clickthree.Utils.WeiXinUtils;
 
 import java.util.List;
@@ -78,35 +79,15 @@ public class MyAccessibility extends AccessibilityService {
                 AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
                 String name = WeiXinUtils.getCurrentCommunicateName(rootInActiveWindow);
                 Log.i(TAG,"当前在和"+name+"聊天");
-                performClickByIdByFather(rootInActiveWindow,3);
+
+                PerFormAction perFormAction = new PerFormAction();
+                perFormAction.performClickByIdByFather(rootInActiveWindow,3);
+
                 break;
         }
     }
 
 
-    //通过父ID和index执行点击
-    private void performClickByIdByFather(AccessibilityNodeInfo rowNode,int index){
-        Log.i("MyService","通过父ID执行点击");
-
-        AccessibilityNodeInfo targetNode = null;
-        //通过资源ID点击
-        targetNode = FindNodeUtils.findBottomNodeByIndex(rowNode,index);
-        if (targetNode.isClickable()) {
-            targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-        }
-    }
-
-
-    //通过父id查找首页底部（微信，通讯录，发现，我）
-    public static AccessibilityNodeInfo findBottomNodeByIndex(AccessibilityNodeInfo nodeInfo,int index) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId("android:id/content");
-            if(list != null && !list.isEmpty()) {
-                return list.get(0).getChild(0).getChild(0).getChild(1).getChild(0).getChild(index);
-            }
-        }
-        return null;
-    }
 
 
 
