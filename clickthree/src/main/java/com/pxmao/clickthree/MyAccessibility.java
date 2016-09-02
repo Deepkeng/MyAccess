@@ -67,23 +67,37 @@ public class MyAccessibility extends AccessibilityService {
                // PerFormAction perFormAction = new PerFormAction();
                // perFormAction.performClickByIndexToBottom(rootInActiveWindow1,4);
 
+              /*  AccessibilityNodeInfo rowNode =null;
+                rowNode = getRootInActiveWindow();
+                if (rowNode == null) {
+                    Log.i(TAG, "noteInfo is　null");
+                    return;
+                } else {
+                    recycle(rowNode);
+                }
+                */
+
                 break;
         }
     }
 
 
 
-            // Log.i(TAG, eventText);
+
+
+
+
+    // Log.i(TAG, eventText);
             // Log.i(TAG, "=============END=====================");
 
 
 
 
 
-    /**
+   /* *//**
      * 循环打印节点的文本信息
      * @param info
-     */
+     *//*
     public void recycle(AccessibilityNodeInfo info) {
 
         if (info.getChildCount() == 0) {
@@ -101,7 +115,7 @@ public class MyAccessibility extends AccessibilityService {
                 }
             }
         }
-    }
+    }*/
 
 
   /*  *//**
